@@ -12,7 +12,7 @@ const register = async (req, res) => {
 const login = async (req, res) => {
   const { email, password } = req.body;
 
-  if (!email) {
+  if (!email || !password) {
     throw new BadRequestError("Please provide email & password");
   }
 
@@ -21,9 +21,13 @@ const login = async (req, res) => {
     throw new UnauthenticatedError("Invilid Crendentials");
   }
 
-  const token = user.createJWT()
+  const isPasswordCorrect = await user.comparePassword(password);
+  if (!isPasswordCorrect) {
+    throw new UnauthenticatedError("invilid Crendentials");
+  }
 
-  res.status(StatusCodes.OK).json({user : {user : user.name} , token})
+  const token = user.createJWT();
+  res.status(StatusCodes.OK).json({ user: { user: user.name }, token });
 };
 
 module.exports = { register, login };
