@@ -8,10 +8,11 @@ const connectDB = require("./db/connect");
 
 app.use(express.json());
 
+const authencticateUser = require('./middleware/authentication')
 
 //routes
 app.use("/api/v1/auth", authRouter);
-app.use("/api/v1/jobs", jobsRouter);
+app.use("/api/v1/jobs", authencticateUser, jobsRouter);
 
 app.get("/", (req, res) => {
   res.send("Job Api");
