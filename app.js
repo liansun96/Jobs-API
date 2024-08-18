@@ -19,8 +19,10 @@ app.get("/", (req, res) => {
 });
 
 const notFoundMiddleware = require("./middleware/not-found");
+const errorHandlerMiddleware = require('./middleware/error-handler')
 
 app.use(notFoundMiddleware);
+app.use(errorHandlerMiddleware)
 
 const port = process.env.PORT || 5000;
 
